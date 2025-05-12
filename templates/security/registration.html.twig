@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="container">
+
+        {% include 'partial/public-nav-bar.html.twig' %}
+
+        <div class="row">
+            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <div class="card card-signin my-5">
+                    <div class="card-body">
+
+                        {% for flash in app.flashes('error_email_verified') %}
+                            <div class="alert alert-danger text-center">{{ flash }}</div>
+                        {% endfor %}
+
+                        <h5 class="card-title text-center">{{ registrationFormTitle }}</h5>
+
+                        {{ form_start(registrationForm, {
+                            attr: { class: 'form-signin' }
+                        }) }}
+
+                        <span class="fw-bold text-danger">{{ form_errors(registrationForm.email) }}</span>
+                        <div class="form-label-group mb-3">
+                            <label for="inputEmail">{{ labelEmail }}</label>
+                            <input
+                                    name="{{ field_name(registrationForm.email) }}"
+                                    value="{{ field_value(registrationForm.email) }}"
+                                    id="inputEmail"
+                                    class="form-control">
+                        </div>
+
+                        <span class="fw-bold text-danger">{{ form_errors(registrationForm.firstName) }}</span>
+                        <div class="form-label-group mb-3">
+                            <label for="inputName">{{ userName }}</label>
+                            <input
+                                    name="{{ field_name(registrationForm.firstName) }}"
+                                    value="{{ field_value(registrationForm.firstName) }}"
+                                    id="inputName"
+                                    class="form-control"
+                                    type="text">
+                        </div>
+
+                        <span class="fw-bold text-danger">{{ form_errors(registrationForm.plainPassword) }}</span>
+                        <div class="form-label-group mb-3">
+                            <label for="inputPassword">{{ labelPassword }}</label>
+                            <input
+                                    name="{{ field_name(registrationForm.plainPassword) }}"
+                                    id="inputPassword"
+                                    class="form-control"
+                                    type="password">
+                        </div>
+
+                        <span class="fw-bold text-danger">{{ form_errors(registrationForm.confirmPassword) }}</span>
+                        <div class="form-label-group mb-3">
+                            <label for="inputConfirmPassword">{{ labelConfirmPassword }}</label>
+                            <input
+                                    name="{{ field_name(registrationForm.confirmPassword) }}"
+                                    id="inputConfirmPassword"
+                                    class="form-control"
+                                    type="password">
+                        </div>
+
+                        <div class="d-flex justify-content-center mb-3">
+                            <button class="btn btn-outline-primary btn-lg fw-bold" type="submit">{{ registrationFormButton }}</button>
+                        </div>
+
+                        {{ form_end(registrationForm) }}
+
+                        <hr class="my-4">
+                        <div class="text-center"><a href="{{ path('app_login') }}">Я уже зарегистрирован</a></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

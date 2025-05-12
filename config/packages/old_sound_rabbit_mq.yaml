@@ -1,0 +1,33 @@
+old_sound_rabbit_mq:
+    connections:
+        default:
+            url: '%env(RABBITMQ_URL)%'
+
+    producers:
+        order_create:
+            connection: default
+            exchange_options: { name: 'old_sound_rabbit_mq.order_create', type: topic }
+
+    consumers:
+        order_create.dev:
+            connection: default
+            exchange_options: { name: 'old_sound_rabbit_mq.order_create', type: topic }
+            queue_options: { name: 'old_sound_rabbit_mq.consumer.order_create.dev', routing_keys: ['dev'] }
+            callback: App\Controller\Amqp\OrderCreate\Consumer
+            idle_timeout: 300
+            idle_timeout_exit_code: 0
+            graceful_max_execution:
+                timeout: 1800
+                exit_code: 0
+            qos_options: { prefetch_size: 0, prefetch_count: 1, global: false }
+        order_create.test:
+            connection: default
+            exchange_options: { name: 'old_sound_rabbit_mq.order_create', type: topic }
+            queue_options: { name: 'old_sound_rabbit_mq.consumer.order_create.test', routing_keys: ['test'] }
+            callback: App\Controller\Amqp\OrderCreateTest\Consumer
+            idle_timeout: 300
+            idle_timeout_exit_code: 0
+            graceful_max_execution:
+                timeout: 1800
+                exit_code: 0
+            qos_options: { prefetch_size: 0, prefetch_count: 1, global: false }

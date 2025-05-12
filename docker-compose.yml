@@ -1,0 +1,74 @@
+services:
+
+  php-fpm:
+    build: docker
+    container_name: ${PHP_CONTAINER_NAME}
+    working_dir: /app
+    restart: always
+    environment:
+      - "XDEBUG_MODE=coverage"
+    volumes:
+      - ./:/app
+    networks:
+      - online-ocenka
+
+  nginx:
+    image: nginx
+    container_name: ${NGINX_CONTAINER_NAME}
+    working_dir: /app
+    restart: always
+    ports:
+      - "${APP_HTTP_PORT}:80"
+    volumes:
+      - ./:/app
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - online-ocenka
+    depends_on:
+      - php-fpm
+      - mysql
+
+  mysql:
+    image: mysql:9.3.0
+    container_name: ${MYSQL_CONTAINER_NAME}
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DB}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql-online-ocenka:/var/lib/mysql
+    networks:
+      - online-ocenka
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: "${RABBITMQ_HOST}"
+    working_dir: /app
+    restart: always
+    hostname: "${RABBITMQ_HOST}"
+    environment:
+      RABBITMQ_DEFAULT_USER: "${RABBITMQ_USER}"
+      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_PASSWORD}"
+    networks:
+      - online-ocenka
+
+  supervisor:
+    build: docker/supervisor
+    container_name: ${SUPERVISOR_CONTAINER_NAME}
+    working_dir: /app
+    restart: always
+    volumes:
+      - ./:/app
+      - ./docker/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
+    command: [ "supervisord", "-c", "/etc/supervisor/supervisord.conf" ]
+    networks:
+      - online-ocenka
+
+networks:
+  online-ocenka:
+    driver: bridge
+
+volumes:
+  mysql-online-ocenka:

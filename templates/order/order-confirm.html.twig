@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+    <div class="container">
+
+        {% include 'partial/nav-bar.html.twig' %}
+
+        {% for flash in app.flashes('order_created') %}
+            <div class="alert alert-success text-center mb-5">{{ flash }}</div>
+        {% endfor %}
+
+        {% for flash in app.flashes('order_error') %}
+            <div class="alert alert-danger text-center mb-5">{{ flash }}</div>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+    <div class="container">
+
+        {% include 'partial/nav-bar.html.twig' %}
+
+        {% if orderArray|length > 0 %}
+
+            <h1 class="text-center">Список заказанных услуг</h1>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Услуга</th>
+                    <th scope="col">Цена</th>
+                    <th scope="col">Статус</th>
+                    <th scope="col">Создан</th>
+                    <th scope="col">Email</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for order in orderArray %}
+                    <tr>
+                        <td class="text-center">{{ loop.index }}</td>
+                        <td>{{ order.title }}</td>
+                        <td>{{ order.price }}</td>
+                        <td>{{ order.status|trans }}</td>
+                        <td>{{ order.createdAt }}</td>
+                        <td>{{ order.email }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+
+        {% else %}
+
+            <h1 class="text-center">У вас ещё нет заказанных услуг</h1>
+
+        {% endif %}
+
+    </div>
+
+{% endblock %}

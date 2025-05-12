@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container">
+
+        {% include 'partial/nav-bar.html.twig' %}
+
+        <h1 class="text-center">{{ createOrderFormTitle }}</h1>
+
+        {{ form_start(orderCreateForm) }}
+
+            <div class="mb-3">
+                <label for="service-select" class="form-label fw-bold">{{ labelServiceSelect }}</label>
+                <select id="service-select" class="form-select" name="{{ field_name(orderCreateForm.priceListId) }}">
+
+                    {% for service in servicesList %}
+                        <option value="{{ service.id }}" data-price="{{ service.price }}">{{ service.title }}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <span class="fw-bold">{{ spanServicePrice }} </span><span id="price-value"></span><span> руб.</span>
+            </div>
+
+            <div class="mb-3">
+                <label for="email-input" class="form-label fw-bold">{{ labelEmailForSendReport }}</label>
+                <span class="fw-bold text-danger">{{ form_errors(orderCreateForm.email) }}</span>
+                <input class="form-control" id="email-input" name="{{ field_name(orderCreateForm.email) }}" value="{{ userEmail }}">
+            </div>
+
+            <div class="d-flex justify-content-center mb-3">
+                <button class="btn btn-outline-primary btn-lg fw-bold" type="submit">{{ createOrderFormButton }}</button>
+            </div>
+
+        {{ form_end(orderCreateForm) }}
+
+    </div>
+
+    <script>
+        const select = document.getElementById('service-select');
+        const span   = document.getElementById('price-value');
+
+        function getPrice() {
+            span.textContent = select.options[select.selectedIndex].dataset.price;
+        }
+
+        getPrice();
+
+        select.addEventListener('change', getPrice);
+    </script>
+
+{% endblock %}
+
