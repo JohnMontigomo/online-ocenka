@@ -9,6 +9,7 @@ services:
       - "XDEBUG_MODE=coverage"
     volumes:
       - ./:/app
+      - /etc/letsencrypt/live/online-ocenka.fun/:/etc/letsencrypt/live/online-ocenka.fun/
     networks:
       - online-ocenka
 
@@ -18,10 +19,12 @@ services:
     working_dir: /app
     restart: always
     ports:
+      - "${APP_HTTPS_PORT}:443"
       - "${APP_HTTP_PORT}:80"
     volumes:
       - ./:/app
-      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf
+      - /etc/letsencrypt/:/etc/letsencrypt/
     networks:
       - online-ocenka
     depends_on:
