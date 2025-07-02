@@ -45,3 +45,6 @@
 8. На порту http://localhost:8031/ будет доступен web-интерфейс проекта
 9. Если не заведётся - удалить все контейнеры с запустить снова, должно работать.  
 10. В контейнере "php-online-ocenka" выполнить миграции: php bin/console doctrine:migrations:migrate --no-interaction
+11. При необходимости создать тестовую базу и выполнить миграции, в контейнере "php-online-ocenka":
+      php bin/console doctrine:database:create -n --env=test
+      php bin/console doctrine:migrations:migrate -n --env=test
