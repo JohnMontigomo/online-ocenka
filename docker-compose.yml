@@ -10,7 +10,7 @@ services:
     volumes:
       - ./:/app
     networks:
-      - online-ocenka-local
+      - online-ocenka
 
   nginx:
     image: nginx
@@ -24,7 +24,7 @@ services:
       - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf
       - /etc/letsencrypt/:/etc/letsencrypt/
     networks:
-      - online-ocenka-local
+      - online-ocenka
     depends_on:
       - php-fpm
       - mysql
@@ -41,7 +41,7 @@ services:
     volumes:
       - mysql-online-ocenka:/var/lib/mysql
     networks:
-      - online-ocenka-local
+      - online-ocenka
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -53,7 +53,7 @@ services:
       RABBITMQ_DEFAULT_USER: "${RABBITMQ_USER}"
       RABBITMQ_DEFAULT_PASS: "${RABBITMQ_PASSWORD}"
     networks:
-      - online-ocenka-local
+      - online-ocenka
 
   supervisor:
     build: docker/supervisor
@@ -65,10 +65,10 @@ services:
       - ./docker/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
     command: [ "supervisord", "-c", "/etc/supervisor/supervisord.conf" ]
     networks:
-      - online-ocenka-local
+      - online-ocenka
 
 networks:
-  online-ocenka-local:
+  online-ocenka:
     driver: bridge
 
 volumes:
