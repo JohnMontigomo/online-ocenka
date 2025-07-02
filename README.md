@@ -44,3 +44,4 @@
    если уже пытались собрать раньше, лучше пересобрать: docker-compose -f docker-compose.yml up -d --build
 8. На порту http://localhost:8031/ будет доступен web-интерфейс проекта
 9. Если не заведётся - удалить все контейнеры с запустить снова, должно работать.  
+10. В контейнере "php-online-ocenka" выполнить миграции: php bin/console doctrine:migrations:migrate --no-interaction
